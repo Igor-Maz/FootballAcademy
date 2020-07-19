@@ -1,0 +1,6 @@
+- "back" w delete template
+- relacje uzytkownik-grupa-uprawnienia
+wyswietlanie nazw w choices get_genre_display
+- jak ustawic te karty obok siebie
+- problem z dodaniem zespolu przez brak trenera
+- CheckboxSelectMultiple dla many to many

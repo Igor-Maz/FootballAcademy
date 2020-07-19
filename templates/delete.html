@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div class="alert alert-danger" role="alert">
+    <form action="" method='POST'>{% csrf_token %}
+        <p>Czy na pewno chcesz usunąć "{{ object }}"?</p>
+        <p><input type="submit" value="Tak"/>
+        <a class="btn btn-secondary" href="{{ return_url }}" role="button">Nie</a></p>
+    </form>
+    </div>
+
+{% endblock %}

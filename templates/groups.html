@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+    <ul>
+        {% for group in groups %}
+            <li>{% if perms.auth.change_group %}
+                <a href="{% url 'updateGroup' group.id %}">
+                    {{ group }}</a>
+            {% else %}
+                {{ group }}
+            {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
