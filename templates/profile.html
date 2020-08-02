@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div class="row mt-3">
+        <div class="col mr-auto">
+            <h3>Twój profil:</h3>
+            <h4><strong>{{ user.username }}</strong></h4>
+        </div>
+        <div class="col ml-5">
+            <a class="btn btn-primary" href="{% url 'url_profile_update' %}" role="button">Edytuj</a>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <table class="table table-striped">
+            <tbody>
+            <tr>
+                <th scope="row">Ksywka:</th>
+                <td>{{ user.profile.username }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Email:</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Imię:</th>
+                <td>{{ user.profile.first_name }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Nazwisko:</th>
+                <td>{{ user.profile.last_name }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Parę słów o sobie:</th>
+                <td>{{ user.profile.description }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Data urodzenia:</th>
+                <td>{{ user.profile.year_of_birth }}</td>
+            </tr>
+            <tr>
+                <th scope="row">W akademi od:</th>
+                <td>{{ user.profile.in_academy_since }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Rola:</th>
+                <td>{{ user.profile.get_role_display }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Moje wynagrodzenie:</th>
+                <td>{{ user.profile.salary }}</td>
+            </tr>
+
+            </tbody>
+        </table>
+        {% if user.profile.role == 3 %}
+            <div class="col ml-5">
+                <a class="btn btn-primary" href="/player/update/{{ user.profile.player.id }}/" role="button">Charakterystyka
+                    zawodnika</a>
+            </div>
+        {% endif %}
+        {% if user.profile.fan %}
+            <div class="col ml-5">
+                <a class="btn btn-primary" href="/fan/update/{{ user.profile.fan.id }}/" role="button">Zarządzaj
+                    polubieniami</a>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

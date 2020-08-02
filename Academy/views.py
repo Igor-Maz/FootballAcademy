@@ -1,40 +1,43 @@
-from django import forms
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import render
 from django.views import View
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, ListView, DeleteView, DetailView
-
-from .models import Coach, Stuff, Player, Supporter, Team, Test, TestResults, Match, MatchSummary, Trainings
+from django.views.generic import CreateView, UpdateView, ListView, DeleteView
+from .forms import TeamForm
+from .models import Player, Team, Fan
+from Accounts.models import Profile
 
 
 class Index(View):
     def get(self, request):
-        return render(request, 'index.html', {'app_version': '111.1 - można to nadpisać w konkretnym widoku'})
+        return render(request, 'index.html')
+
+
+class AboutUs(View):
+    def get(self, request):
+        return render(request, 'about.html')
 
 
 class CoachListView(ListView):
-    model = Coach
+    model = Profile
     template_name = 'objects_list.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({'object_list': Coach.objects.all(), 'category': 'coach', 'title': 'Trenerzy w akademii:'})
+        context.update(
+            {'object_list': Profile.objects.filter(role=1), 'category': 'coach', 'title': 'Trenerzy w akademii:'})
         return context
 
 
-class CoachDetailsView(DetailView):
-    model = Coach
-    fields = '__all__'
-    template_name = 'general_content.html'
-
-    def get_context_data(self, id, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({Coach.objects.get(id=id)})
-        return context
+def show_coach(request, id):
+    profile = Profile.objects.get(pk=id)
+    teams = Team.objects.filter(coach=id)
+    args = {'profile': profile, 'teams': teams, 'category': 'coach', 'title': 'Trener'}
+    return render(request, 'individual_view.html', args)
 
 
-class CoachUpdateView(UpdateView):
-    model = Coach
+class CoachUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = ['Accounts.change_profile']
+    model = Profile
     fields = '__all__'
     template_name = 'general_content.html'
     success_url = '/coach/'
@@ -43,61 +46,49 @@ class CoachUpdateView(UpdateView):
         return super().get_object(queryset)
 
 
-class CoachDeleteView(DeleteView):
-    model = Coach
+class CoachDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = ['Accounts.delete_profile']
+    model = Profile
     template_name = 'delete.html'
     success_url = '/coach/'
     extra_context = {'return_url': '/coach/'}
 
 
-class CoachAddView(CreateView):
-    model = Coach
-    fields = '__all__'
-    template_name = 'general_content.html'
-    success_url = '/coach/'
-
-
-class StuffListView(ListView):
-    model = Stuff
+class StaffListView(ListView):
+    model = Profile
     template_name = 'objects_list.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({'object_list': Stuff.objects.all(), 'category': 'stuff', 'title': 'Kadra w akademii:'})
+        context.update(
+            {'object_list': Profile.objects.filter(role=2), 'category': 'staff', 'title': 'Kadra w akademii:'})
         return context
 
 
-class StuffDetailsView(DetailView):
-    model = Stuff
+def show_staff(request, id):
+    profile = Profile.objects.get(pk=id)
+    teams = Team.objects.filter(staff=id)
+    args = {'profile': profile, 'teams': teams, 'category': 'staff', 'title': 'Pacownik klubu'}
+    return render(request, 'individual_view.html', args)
+
+
+class StaffUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = ['Accounts.change_profile']
+    model = Profile
     fields = '__all__'
     template_name = 'general_content.html'
+    success_url = '/staff/'
 
     def get_object(self, queryset=None):
         return super().get_object(queryset)
 
 
-class StuffUpdateView(UpdateView):
-    model = Stuff
-    fields = '__all__'
-    template_name = 'general_content.html'
-    success_url = '/stuff/'
-
-    def get_object(self, queryset=None):
-        return super().get_object(queryset)
-
-
-class StuffDeleteView(DeleteView):
-    model = Stuff
+class StaffDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = ['Accounts.delete_profile']
+    model = Profile
     template_name = 'delete.html'
-    success_url = '/stuff/'
-    extra_context = {'return_url': '/stuff/'}
-
-
-class StuffAddView(CreateView):
-    model = Stuff
-    fields = '__all__'
-    template_name = 'general_content.html'
-    success_url = '/stuff/'
+    success_url = '/staff/'
+    extra_context = {'return_url': '/staff/'}
 
 
 class PlayerListView(ListView):
@@ -110,16 +101,16 @@ class PlayerListView(ListView):
         return context
 
 
-class PlayerDetailsView(DetailView):
-    model = Player
-    fields = '__all__'
-    template_name = 'general_content.html'
+def show_player(request, id):
+    player = Player.objects.get(pk=id)
+    profile = player.profile
+    teams = Team.objects.filter(players=id)
+    args = {'player': player, 'profile': profile, 'teams': teams, 'category': 'player', 'title': 'Zawodnik'}
+    return render(request, 'player_view.html', args)
 
-    def get_object(self, queryset=None):
-        return super().get_object(queryset)
 
-
-class PlayerUpdateView(UpdateView):
+class PlayerUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = ['Academy.change_player']
     model = Player
     fields = '__all__'
     template_name = 'general_content.html'
@@ -129,14 +120,16 @@ class PlayerUpdateView(UpdateView):
         return super().get_object(queryset)
 
 
-class PlayerDeleteView(DeleteView):
+class PlayerDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = ['Academy.delete_player']
     model = Player
     template_name = 'delete.html'
     success_url = '/player/'
     extra_context = {'return_url': '/player/'}
 
 
-class PlayerAddView(CreateView):
+class PlayerAddView(PermissionRequiredMixin, CreateView):
+    permission_required = ['Academy.add_player']
     model = Player
     fields = '__all__'
     template_name = 'general_content.html'
@@ -153,21 +146,20 @@ class TeamListView(ListView):
         return context
 
 
-class TeamDetailsView(View):
-    def get(self, request, id):
-        team = Team.objects.get(id=id)
-        coach = Coach.objects
-        return render(request, 'team_details.html', {'team': team, })
+def show_team(request, id):
+    team = Team.objects.get(pk=id)
+    coaches = Profile.objects.filter(Coach=id)
+    staffs = Profile.objects.filter(Staff=id)
+    players = Player.objects.filter(team=id)
+    args = {'team': team, 'coaches': coaches, 'staffs': staffs, 'players': players, 'category': 'team',
+            'title': 'Zespół'}
+    return render(request, 'team_view.html', args)
 
 
-class TeamUpdateView(UpdateView):
+class TeamUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = ['Academy.change_team']
     model = Team
     fields = '__all__'
-    widgets = {
-        'players': forms.CheckboxSelectMultiple(),
-        'stuff': forms.CheckboxSelectMultiple(),
-        'coach': forms.CheckboxSelectMultiple()
-    }
     template_name = 'general_content.html'
     success_url = '/team/'
 
@@ -175,63 +167,62 @@ class TeamUpdateView(UpdateView):
         return super().get_object(queryset)
 
 
-class TeamDeleteView(DeleteView):
+class TeamDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = ['Academy.delete_team']
     model = Team
     template_name = 'delete.html'
     success_url = '/team/'
     extra_context = {'return_url': '/team/'}
 
 
-class TeamAddView(CreateView):
-    model = Team
-    # form_class =
-    fields = ['name', 'description', 'type', 'players']
-    # exclude = ['coach', 'stuff']
-    widgets = {
-        'players': forms.CheckboxSelectMultiple()
-    }
+class TeamAddView(PermissionRequiredMixin, CreateView):
+    permission_required = ['Academy.add_team']
+    form_class = TeamForm
+    coaches = Profile.objects.filter(role=1)
+    staffs = Profile.objects.filter(role=2)
     template_name = 'general_content.html'
     success_url = '/team/'
 
 
-class SupporterListView(ListView):
-    model = Supporter
+class FanListView(ListView):
+    model = Fan
     template_name = 'objects_list.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({'object_list': Supporter.objects.all(), 'category': 'supporter', 'title': 'Kibice:'})
+        context.update({'object_list': Fan.objects.all(), 'category': 'fan', 'title': 'Kibice:'})
         return context
 
 
-class SupporterDetailsView(DetailView):
-    model = Supporter
-    fields = '__all__'
+def show_fan(request, id):
+    fan = Fan.objects.get(pk=id)
+    profile = fan.profile
+    args = {'fan': fan, 'profile': profile, 'category': 'fun', 'title': 'Kibic'}
+    return render(request, 'fan_view.html', args)
+
+
+class FanUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = ['Academy.change_fan']
+    model = Fan
+    fields = ['favourite_teams', 'favourite_players']
     template_name = 'general_content.html'
+    success_url = '/fan/'
 
     def get_object(self, queryset=None):
         return super().get_object(queryset)
 
 
-class SupporterUpdateView(UpdateView):
-    model = Supporter
-    fields = '__all__'
-    template_name = 'general_content.html'
-    success_url = '/supporter/'
-
-    def get_object(self, queryset=None):
-        return super().get_object(queryset)
-
-
-class SupporterDeleteView(DeleteView):
-    model = Supporter
+class FanDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = ['Academy.delete_fan']
+    model = Fan
     template_name = 'delete.html'
-    success_url = '/supporter/'
-    extra_context = {'return_url': '/supporter/'}
+    success_url = '/fan/'
+    extra_context = {'return_url': '/fan/'}
 
 
-class SupporterAddView(CreateView):
-    model = Supporter
+class FanAddView(PermissionRequiredMixin, CreateView):
+    permission_required = ['Academy.add_fan']
+    model = Fan
     fields = '__all__'
     template_name = 'general_content.html'
-    success_url = '/supporter/'
+    success_url = '/fan/'

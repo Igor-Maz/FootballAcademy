@@ -1,15 +1,36 @@
 {% extends "base.html" %}
 {% block content %}
-    <ul>
-        {% for group in groups %}
-            <li>{% if perms.auth.change_group %}
-                <a href="{% url 'updateGroup' group.id %}">
-                    {{ group }}</a>
-            {% else %}
-                {{ group }}
+
+    <div class="row mt-3">
+        <div class="col mr-auto">
+            <h3>{{ title }}</h3>
+        </div>
+        <div class="col ml-5">
+            {% if perms.auth.add_group %}
+                <a class="btn btn-primary" href="{% url 'url_groups_add' %}" role="button">Dodaj</a>
             {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col mr-auto">
+            <ul>
+                {% for group in groups %}
+                    <li>{% if perms.auth.change_group %}
+                        <a href="{% url 'url_groups_update' group.id %}">
+                            {{ group }}</a>
+                    {% else %}
+                        {{ group }}
+                    {% endif %}
+                        {% if perms.auth.delete_group %}
+                            <a class="btn btn-danger" href="{% url 'url_groups_delete' group.id %}"
+                               role="button">Usuń</a>
+                        {% endif %}
+
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 
 {% endblock %}

@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 
+
 def number_on_tshirt(value):
     if 1 > value > 99:
         raise ValidationError("Numer na koszulce niepoprawny")

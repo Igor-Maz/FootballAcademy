@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+
+    <div class="row mt-3">
+        <div class="col mx-auto">
+            <img src="{% static '2.jpg' %}" class="img-fluid" alt="Responsive image">
+        </div>
+        <div class="col my-auto">
+            <p>
+                Projekt zaliczeniowy w ramach kursu <strong>Python Developer</strong>
+                w szkole Coderslab.<br>Kraków 2020<br><br>Projekt i wykonanie - Igor Mazgaj<br>Opieka merytoryczna -
+                Sławek Bogusławski
+            </p>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col my-auto">
+            <p>
+                Aplikacja służy do zarządzania przykładową szkółką piłkarską. Na jej potrzeby zdefiniowane zostały
+                następujące modele połączone różnymi typami relacji:
+            </p>
+        </div>
+        <div class="col mx-auto">
+            <img src="{% static '1.jpg' %}" class="img-fluid" alt="Responsive image">
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col mx-auto">
+            <img src="{% static '5.jpg' %}" class="img-fluid" alt="Responsive image">
+        </div>
+        <div class="col my-auto">
+            <ul>
+                <li>Profil - model rozszerzający Usera</li>
+                <li>Zawodnik</li>
+                <li>Kibic</li>
+                <li>Zespół</li>
+                <li>TeamType - model pomocniczy</li>
+            </ul>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col my-auto">
+            <p>
+                Projekt zrealizowany został w Django i Bootstrap. Zawiera moduł rejestracji i logowania oraz zarządzania
+                uprawnieniami i grupami użytkowników.
+            </p>
+        </div>
+        <div class="col mx-auto">
+            <img src="{% static '3.png' %}" class="img-fluid" alt="Responsive image">
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col mx-auto">
+            <img src="{% static '4.jpg' %}" class="img-fluid" alt="Responsive image">
+        </div>
+        <div class="col my-auto">
+            <p>
+                Został przetestowany manulanie ;)
+            </p>
+        </div>
+    </div>
+{% endblock %}

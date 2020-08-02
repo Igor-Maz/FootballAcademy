@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div class="row mt-3">
+        <div class="col mr-auto">
+            <h3>{{ title }}</h3>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col mr-auto">
+            <ul>
+                {% for user in users %}
+                    <li>{% if perms.auth.change_user %}
+                        <a href="{% url 'url_users_update_admin' user.id %}">
+                            {{ user }}</a>
+                    {% else %}
+                        {{ user }}
+                    {% endif %}
+                        {% if perms.auth.delete_user %}
+                            <a class="btn btn-danger" href="{% url 'url_users_delete_admin' user.id %}"
+                               role="button">Usuń</a>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}

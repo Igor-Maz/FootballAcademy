@@ -6,35 +6,38 @@
             <h3>{{ title }}</h3>
         </div>
         <div class="col ml-5">
-            <a class="btn btn-primary" href="/{{ category }}/add/" role="button">Dodaj</a>
+            {% if user.is_staff and category == 'player' or user.is_staff and category == 'team' %}
+                <a class="btn btn-primary" href="/{{ category }}/add/" role="button">Dodaj</a>
+            {% endif %}
         </div>
     </div>
 
     {% for object in object_list %}
-{#        {% if forloop.counter0|divisibleby:2 %}#}
-{#            <div class="row mt-3">#}
-{##}
-{#        {% endif %}#}
-{#    <div class="col">#}
+
         <div class="card mt-3" style="width: 14rem; display: inline-block">
             <div class="card-body">
                 <h5 class="card-title">{{ object }}</h5>
-                <h6 class="card-subtitle mb-2 text-muted"><a href="{{ object.get_detail_url }}/">Wyświetl profil</a>
+                {% if category == 'team' %}
+                    <p class="card-text">{{ object.type }}</p>
+                {% endif %}
+                <h6 class="card-subtitle mb-2 text-muted">
+                    <a href="/{{ category }}/{{ object.id }}/">Wyświetl profil</a>
                 </h6>
                 <p class="card-text">{{ object.description }}</p>
-                {#get_genre_display#}
-                <div class="btn-group btn-group-sm" role="group" aria-label="...">
-                    <a class="btn btn-info" href="/{{ category }}/update/{{ object.id }}/"
-                       role="button">Edytuj</a>
-                    <a class="btn btn-danger" href="/{{ category }}/delete/{{ object.id }}/"
-                       role="button">Usuń</a>
-                </div>
+                {% if category == 'player' %}
+                    <p class="card-text">{{ object.profile.description }}</p>
+                {% endif %}
+                {% if user.is_staff %}
+                    <div class="btn-group btn-group-sm" role="group" aria-label="...">
+                        <a class="btn btn-info" href="/{{ category }}/update/{{ object.id }}/"
+                           role="button">Edytuj</a>
+                        <a class="btn btn-danger" href="/{{ category }}/delete/{{ object.id }}/"
+                           role="button">Usuń</a>
+                    </div>
+                {% endif %}
             </div>
         </div>
-{#    </div>#}
-{#    {% if forloop.counter0|divisibleby:2 %}#}
-{#        </div>#}
-{#    {% endif %}#}
+
     {% endfor %}
 
 {% endblock %}

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Academy.apps.AcademyConfig',
+    'Accounts'
 ]
 
 MIDDLEWARE = [
@@ -122,4 +123,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = 'url_index'
-LOGOUT_REDIRECT_URL = 'url_index'
+LOGOUT_REDIRECT_URL = 'login'

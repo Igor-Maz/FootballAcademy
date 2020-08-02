@@ -4,3 +4,23 @@ wyswietlanie nazw w choices get_genre_display
 - jak ustawic te karty obok siebie
 - problem z dodaniem zespolu przez brak trenera
 - CheckboxSelectMultiple dla many to many
+
+
+-jak odziedziczyc name i surname w profilu po userze przez signals
+-jak stosowac if dla metody __str__   (rozwiazanie przez metode has_atribute)
+-jak dodac dwa manytomany do tego samego modelu (przez related name)
+-supported_players i supported_teams czemu nie moge zaimportowac Players i Teams do account.models (nie da sie, ale nie importowac tylko uzywac modeli zaleznych)
+-jak wyciagnac te dana do Charakterystyki zawodnika/fana user.profile.player_id/fan_id  (pomysl dobry ale musi byc user.profile.player.id i tylko dla onetone)
+
+
+
+-charakterystyka zawodnika i ulubione zespoly/zawodnicy w profilu uzytkownika
+-stworzyc inny view dla edycji zawodnika
+
+
+
+-choices dla CheckboxSelectMultiple w form team i Fan
+(jak ograniczyc opcje ktore sie wyswietlaja
+np, tylko Trenerzy na liscie Coach->Team albo tylko zalogowany User na liście Fan_add)
+
+

@@ -15,43 +15,41 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.conf.urls import url, include
+from django.conf.urls import include
 from Academy import views
-from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('aboutus/', views.AboutUs.as_view(), name='url_aboutus'),
     path('', views.Index.as_view(), name='url_index'),
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('accounts/', include('accounts.urls')),
+    path('Accounts/', include('django.contrib.auth.urls')),
+    path('Accounts/', include('Accounts.urls')),
 
     path('coach/', views.CoachListView.as_view(), name='url_coach'),
-    path('coach/<int:pk>/', views.CoachDetailsView.as_view(), name="url_coach_details"),
+    path('coach/<int:id>/', views.show_coach, name="url_coach_details"),
     path('coach/update/<pk>/', views.CoachUpdateView.as_view(), name="url_coach_update"),
     path('coach/delete/<pk>/', views.CoachDeleteView.as_view(), name="url_coach_delete"),
-    path('coach/add/', views.CoachAddView.as_view(), name='url_coach_add'),
 
-    path('stuff/', views.StuffListView.as_view(), name='url_stuff'),
-    path('stuff/<int:pk>/', views.StuffDetailsView.as_view(), name="url_stuff_details"),
-    path('stuff/update/<pk>/', views.StuffUpdateView.as_view(), name="url_stuff_update"),
-    path('stuff/delete/<pk>/', views.StuffDeleteView.as_view(), name="url_stuff_delete"),
-    path('stuff/add/', views.StuffAddView.as_view(), name='url_stuff_add'),
+    path('staff/', views.StaffListView.as_view(), name='url_staff'),
+    path('staff/<int:id>/', views.show_staff, name="url_staff_details"),
+    path('staff/update/<pk>/', views.StaffUpdateView.as_view(), name="url_staff_update"),
+    path('staff/delete/<pk>/', views.StaffDeleteView.as_view(), name="url_staff_delete"),
 
     path('player/', views.PlayerListView.as_view(), name='url_player'),
-    path('player/<int:pk>/', views.PlayerDetailsView.as_view(), name="url_player_details"),
+    path('player/<int:id>/', views.show_player, name="url_player_details"),
     path('player/update/<pk>/', views.PlayerUpdateView.as_view(), name="url_player_update"),
     path('player/delete/<pk>/', views.PlayerDeleteView.as_view(), name="url_player_delete"),
     path('player/add/', views.PlayerAddView.as_view(), name='url_player_add'),
 
     path('team/', views.TeamListView.as_view(), name='url_team'),
-    path('team/<int:pk>/', views.TeamDetailsView.as_view(), name="url_team_details"),
+    path('team/<int:id>/', views.show_team, name="url_team_details"),
     path('team/update/<pk>/', views.TeamUpdateView.as_view(), name="url_team_update"),
     path('team/delete/<pk>/', views.TeamDeleteView.as_view(), name="url_team_delete"),
     path('team/add/', views.TeamAddView.as_view(), name='url_team_add'),
 
-    path('supporter/', views.SupporterListView.as_view(), name='url_supporter'),
-    path('supporter/<int:pk>/', views.SupporterDetailsView.as_view(), name="url_supporter_details"),
-    path('supporter/update/<pk>/', views.SupporterUpdateView.as_view(), name="url_supporter_update"),
-    path('supporter/delete/<pk>/', views.SupporterDeleteView.as_view(), name="url_supporter_delete"),
-    path('supporter/add/', views.SupporterAddView.as_view(), name='url_supporter_add'),
+    path('fan/', views.FanListView.as_view(), name='url_fan'),
+    path('fan/<int:id>/', views.show_fan, name="url_fan_details"),
+    path('fan/update/<pk>/', views.FanUpdateView.as_view(), name="url_fan_update"),
+    path('fan/delete/<pk>/', views.FanDeleteView.as_view(), name="url_fan_delete"),
+    path('fan/add/', views.FanAddView.as_view(), name='url_fan_add'),
 ]

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div class="row mt-3">
+        <div class="col mr-auto">
+            <h3>{{ title }}:</h3>
+            <h4><strong>{{ profile.username }}</strong></h4>
+        </div>
+        {% if user.is_staff %}
+            <div class="col ml-5">
+                <a class="btn btn-primary" href="/{{ category }}/update/{{ profile.id }}/" role="button">Edytuj</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="row mt-3">
+        <table class="table table-striped">
+            <tbody>
+            <tr>
+                <th scope="row">Ksywka:</th>
+                <td>{{ profile.username }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Imię:</th>
+                <td>{{ profile.first_name }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Nazwisko:</th>
+                <td>{{ profile.last_name }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Parę słów o sobie:</th>
+                <td>{{ profile.description }}</td>
+            </tr>
+            <tr>
+                <th scope="row">W akademi od:</th>
+                <td>{{ profile.in_academy_since }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Rola:</th>
+                <td>{{ profile.get_role_display }}</td>
+            </tr>
+            {% if user.is_staff %}
+                <tr>
+                    <th scope="row">Wynagrodzenie:</th>
+                    <td>{{ profile.salary }}</td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+        <div class="container">
+            <div class="row mt-3">
+                <div class="col mr-auto">
+                    <h4>Powiązane zespoły:</h4>
+
+                    {% for object in teams %}
+                        <div class="card mt-3" style="width: 14rem; display: inline-block">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ object }}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">
+                                    <a href="/team/{{ object.id }}/">Wyświetl profil</a>
+                                </h6>
+                                <p class="card-text">{{ object.description }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
